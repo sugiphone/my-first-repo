@@ -1,1 +1,45 @@
+# データの可視化及び処理を行うライブラリー
+import numpy as np 
+import seaborn as sns
+import pandas as pd 
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 
+# 機械学習ライブラリ「Scikit-learn」のインポート
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.feature_selection import RFE
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+
+# データ抽出、整理
+df = pd.read_csv('../input/train.csv')
+df = df.drop(['Name', 'Ticket', 'Cabin'], axis=1).dropna()
+df_cols = df.columns[1:]
+df = pd.get_dummies(df, columns=['Sex', 'Embarked'], drop_first=True)
+
+# 交差検証用にデータを分割
+train_set, test_set = train_test_split(df, test_size=0.2, random_state=42)
+
+# 分割したデータを特徴量、目的変数に分割
+X_train = train_set.drop(['PassengerId', 'Survived'], axis=1)
+y_train = train_set['Survived'].copy()
+
+X_test = test_set.drop(['PassengerId', 'Survived'], axis=1)
+y_test = test_set['Survived'].copy()
+
+# 訓練データを使ってモデルの訓練
+logclassifier = LogisticRegression()
+logclassifier.fit(X_train, y_train)
+
+LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
+          intercept_scaling=1, max_iter=100, multi_class='ovr', n_jobs=1,
+          penalty='l2', random_state=None, solver='liblinear', tol=0.0001,
+          verbose=0, warm_start=False)
+
+# 訓練データの予測
+y_pred = logclassifier.predict(X_train)
+
+# 正解率を算出
+accuracy_score(y_train, y_pred)
