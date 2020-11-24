@@ -1,2 +1,2 @@
-# my-first-repo
-This is my first repo
+# Kaggle-Code
+This branch has Kaggle Code and Tips.
