@@ -1,2 +1,3 @@
-# my-first-repo
-This is my first repo
+# myrepo
+This is my repo.
+Using for Python, Kaggle, etc...
